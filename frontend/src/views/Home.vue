@@ -1,18 +1,34 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-  </div>
+  <main class="wrp__main">
+    <Input class="wrp__main__input" placeholder="Введите VIN" />
+    <Button
+      class="wrp__main__button"
+      value="Проверить"
+      backColor="#ED7749"
+      textColor="white"
+      width="100px"
+      height="50px">
+    </Button>
+  </main>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
+<script setup lang="ts">
+import Input from "@/components/Input.vue"
+import Button from "@/components/Button.vue";
 
-export default defineComponent({
-  name: "Home",
-  components: {
-    HelloWorld,
-  },
-});
 </script>
+
+<style lang="scss" scoped>
+
+.wrp__main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //background-image: url("~@/assets/tracks-removebg.png");
+
+  &__input{
+    margin-right: 15px;
+  }
+}
+
+</style>
