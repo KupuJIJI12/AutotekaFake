@@ -9,10 +9,12 @@ namespace AutoInfo.Domain.Models
         [Required]
         public Guid Id { get; set; }
         
+        public Guid VIN { get; set; }
+        
         [Required]
         [ForeignKey("VIN")]
-        public Vehicle Vehicle { get; set; }
-        
+        public Car.Car Car { get; set; }
+
         [Required]
         public DateTime Date { get; set; }
     }

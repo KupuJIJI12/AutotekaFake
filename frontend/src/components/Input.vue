@@ -31,6 +31,7 @@ input {
 
   &:focus::placeholder{
     color: transparent;
+    
   }
 }
 </style>

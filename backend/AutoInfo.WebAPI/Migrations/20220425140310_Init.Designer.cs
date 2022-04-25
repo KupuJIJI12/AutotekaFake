@@ -3,15 +3,17 @@ using System;
 using AutoInfo.DLL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AutoInfo.WebAPI.Migrations
 {
     [DbContext(typeof(CarReportDbContext))]
-    partial class CarReportDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220425140310_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,12 +109,7 @@ namespace AutoInfo.WebAPI.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("VIN")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("VIN");
 
                     b.ToTable("Reports");
                 });
@@ -340,17 +337,6 @@ namespace AutoInfo.WebAPI.Migrations
 
                     b.Navigation("Passport")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("AutoInfo.Domain.Models.Report", b =>
-                {
-                    b.HasOne("AutoInfo.Domain.Models.Car.Car", "Car")
-                        .WithMany()
-                        .HasForeignKey("VIN")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("AutoInfo.Domain.Models.VehicleOwner", b =>

@@ -3,15 +3,17 @@ using System;
 using AutoInfo.DLL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AutoInfo.WebAPI.Migrations
 {
     [DbContext(typeof(CarReportDbContext))]
-    partial class CarReportDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220425140556_AddCarToReport")]
+    partial class AddCarToReport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

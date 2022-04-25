@@ -6,19 +6,22 @@ namespace AutoInfo.Domain.Models
     public class VehicleOwner : Person
     {
         public Guid Id { get; set; }
-        public OwnerType OwnerType { get; }
-        public string? OrganizationName { get; }
         
+        public VehiclePassport VehiclePassport { get; set; }
         
-        /*protected VehicleOwner(string name, string surname, string patronymic = "")
-            : base(name, surname, patronymic)
+        public OwnerType OwnerType { get; set; }
+        
+        public string? OrganizationName { get; set; }
+
+        protected VehicleOwner(string firstName, string secondName, string middleName = "")
+            : base(firstName, secondName, middleName)
         { }
 
-        protected VehicleOwner(string name, string surname, OwnerType ownerType, string patronymic = "",
-            string organizationName = "") : this(name, surname, patronymic)
+        public VehicleOwner(string firstName, string secondName, OwnerType ownerType, string middleName = "",
+            string organizationName = "") : this(firstName, secondName, middleName)
         {
             OwnerType = ownerType;
             OrganizationName = ownerType is OwnerType.LegalPerson ? organizationName : "";
-        }*/
+        }
     }
 }

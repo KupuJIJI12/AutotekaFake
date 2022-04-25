@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoInfo.DLL.Data;
+using AutoInfo.Domain.Enums;
 using AutoInfo.Domain.Models;
+using AutoInfo.Domain.Models.Car;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,9 +22,38 @@ namespace AutoInfo.WebAPI.Controllers
         }
         
         [HttpGet]
-        public IEnumerable<Report> GetReports()
+        public IEnumerable<Car> GetReports()
         {
-            return _dbContext.Reports.Include(report => report.Vehicle);
+            return _dbContext.Cars.Include(c => c.Characteristic).ThenInclude(c => c.Engine);
+        }
+
+        [HttpPost]
+        public async Task AddCar()
+        {
+            var carUid = Guid.NewGuid();
+            var carCharacteristic = new VehicleCharacteristic()
+            {
+                Brand = "Zhiguli",
+                Model = "ВАЗ-2106",
+                Color = "Вишнёвый",
+                Weight = 1000.0f,
+                Engine = new Engine()
+                {
+                    EngineId = Guid.NewGuid(),
+                    Displacement = 1.6f,
+                    Model = "Mitsubishi",
+                    Power = 105,
+                    Type = EngineType.PetrolEngine
+                }
+            };
+            var testCar = new Car
+            {
+                VIN = carUid,
+                Characteristic = carCharacteristic,
+                CarNumber = "afsdfa"
+            };
+            await _dbContext.Cars.AddAsync(testCar);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

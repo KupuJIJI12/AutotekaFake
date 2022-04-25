@@ -2,13 +2,19 @@
 {
     public class Person
     {
-        public string FullName { get; }
+        public string FullName { get; set; }
+        public string FirstName { get; set; }
+        public string SecondName { get; set; }
+        public string MiddleName { get; set; }
         public string? PresentAddress { get; set; }
         public string? CitizenShip { get; set; }
 
-        /*protected Person(string name, string surname, string patronymic = "")
+        protected Person(string firstName, string secondName, string middleName = "")
         {
-            FullName = $"{name} {surname}{(string.IsNullOrEmpty(patronymic) ? "" : " " +  patronymic)}";
-        }*/
+            FirstName = firstName;
+            SecondName = secondName;
+            MiddleName = middleName;
+            FullName = $"{firstName} {secondName}{(string.IsNullOrEmpty(middleName) ? "" : " " + middleName)}";
+        }
     }
 }

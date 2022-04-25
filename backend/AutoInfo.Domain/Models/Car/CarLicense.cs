@@ -19,7 +19,7 @@ namespace AutoInfo.Domain.Models.Car
         
         [Required]
         [ForeignKey("VIN")]
-        public CarCharacteristic Characteristic { get; set; }
+        public VehicleCharacteristic Characteristic { get; set; }
         
         [Required] 
         public VehicleСategory Category { get; set; }

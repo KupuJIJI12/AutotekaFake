@@ -1,13 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AutoInfo.Domain.Models.Car
 {
     public class Car : Vehicle
     {
-        public override CarCharacteristic Characteristic { get; }
         public string CarNumber { get; set; }
+
+        public Guid PassportId { get; set; }
+        public Guid LicenseId { get; set; }
+        
         [ForeignKey("PassportId")]
-        public CarPassport CarPassport { get; set; }
+        public VehiclePassport CarPassport { get; set; }
+        
         [ForeignKey("LicenseId")]
         public CarLicense CarLicense { get; set; }
 
