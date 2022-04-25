@@ -7,7 +7,8 @@ namespace AutoInfo.Domain.Models
     public class Engine
     {
         [Required]
-        public string EngineId { get; set; }
+        [Key]
+        public Guid EngineId { get; set; }
         
         public EngineType Type { get; set; }
         
@@ -18,6 +19,6 @@ namespace AutoInfo.Domain.Models
         public short Power { get; set; }
         
         [Required]
-        public short Displacement { get; set; }
+        public float Displacement { get; set; }
     }
 }

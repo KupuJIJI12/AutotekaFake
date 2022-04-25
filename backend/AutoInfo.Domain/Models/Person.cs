@@ -6,9 +6,9 @@
         public string? PresentAddress { get; set; }
         public string? CitizenShip { get; set; }
 
-        protected Person(string name, string surname, string patronymic = "")
+        /*protected Person(string name, string surname, string patronymic = "")
         {
             FullName = $"{name} {surname}{(string.IsNullOrEmpty(patronymic) ? "" : " " +  patronymic)}";
-        }
+        }*/
     }
 }

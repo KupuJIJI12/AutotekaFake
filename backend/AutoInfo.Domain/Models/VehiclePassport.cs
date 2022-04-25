@@ -6,9 +6,7 @@ namespace AutoInfo.Domain.Models
 {
     public abstract class VehiclePassport : Passport
     {
-        [Required]
-        public Guid PassportId { get; set; }
-        
+
         [Required]
         public DateTime YearOfManufacture { get; set; }
         
@@ -16,6 +14,6 @@ namespace AutoInfo.Domain.Models
         public abstract VehicleCharacteristic Characteristic { get; }
         
         [Required]
-        public abstract IEnumerable<VehicleOwner> Owners { get; }
+        public IEnumerable<VehicleOwner> Owners { get; set; }
     }
 }

@@ -1,13 +1,16 @@
-﻿using AutoInfo.Domain.Enums;
+﻿using System;
+using AutoInfo.Domain.Enums;
 
 namespace AutoInfo.Domain.Models
 {
     public class VehicleOwner : Person
     {
+        public Guid Id { get; set; }
         public OwnerType OwnerType { get; }
         public string? OrganizationName { get; }
-
-        protected VehicleOwner(string name, string surname, string patronymic = "")
+        
+        
+        /*protected VehicleOwner(string name, string surname, string patronymic = "")
             : base(name, surname, patronymic)
         { }
 
@@ -16,6 +19,6 @@ namespace AutoInfo.Domain.Models
         {
             OwnerType = ownerType;
             OrganizationName = ownerType is OwnerType.LegalPerson ? organizationName : "";
-        }
+        }*/
     }
 }

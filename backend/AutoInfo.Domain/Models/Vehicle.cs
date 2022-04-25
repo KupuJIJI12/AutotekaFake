@@ -13,6 +13,6 @@ namespace AutoInfo.Domain.Models
         [Required] 
         public abstract VehicleCharacteristic Characteristic { get; }
         
-        public IEnumerable<byte[]>? Pictures { get; set; }
+        public byte[]? Pictures { get; set; }
     }
 }

@@ -2,11 +2,11 @@
 {
     public enum VehicleСategory
     {
-        A,
-        A1,
         B,
         B1,
         C,
-        C1
+        C1,
+        A,
+        A1,
     }
 }

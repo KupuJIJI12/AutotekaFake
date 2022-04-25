@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using AutoInfo.Domain.Enums;
 
 namespace AutoInfo.Domain.Models.Car
@@ -7,15 +8,17 @@ namespace AutoInfo.Domain.Models.Car
     public class CarLicense
     {
         [Required]
+        [Key]
         public Guid LicenseId { get; set; }
         
         [Required]
-        public string VIN { get; set; }
+        public Guid VIN { get; set; }
         
         [Required]
         public string RegistrationNumber { get; set; }
         
         [Required]
+        [ForeignKey("VIN")]
         public CarCharacteristic Characteristic { get; set; }
         
         [Required] 

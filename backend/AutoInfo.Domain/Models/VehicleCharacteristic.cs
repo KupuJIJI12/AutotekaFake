@@ -16,6 +16,6 @@ namespace AutoInfo.Domain.Models
         public string Model { get; set; }
         
         public string? Color { get; set; }
-        public string? Weight { get; set; }
+        public float? Weight { get; set; }
     }
 }
