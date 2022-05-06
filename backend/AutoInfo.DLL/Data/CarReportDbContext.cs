@@ -13,7 +13,7 @@ namespace AutoInfo.DLL.Data
         public DbSet<Car> Cars { get; set; }
         public DbSet<CarOwner> CarOwners { get; set; }
         public DbSet<CarEngine> CarEngines { get; set; }
-        public DbSet<VehiclePassport> CarPassports { get; set; }
+        public DbSet<CarPassport> CarPassports { get; set; }
         public DbSet<CarLicense> CarLicenses { get; set; }
 
         public CarReportDbContext(DbContextOptions<CarReportDbContext> options)
@@ -22,25 +22,6 @@ namespace AutoInfo.DLL.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<CarLicense>(b =>
-            {
-                b.OwnsOne(p => p.Characteristic);
-                b.OwnsOne(p => p.Passport);
-            });
-
-            builder.Entity<VehiclePassport>(b =>
-            {
-                b.HasKey(p => p.PassportId);
-                b.OwnsOne(p => p.Characteristic);
-                b.HasMany(p => p.Owners).WithOne(p => p.VehiclePassport);
-                b.ToTable("CarPassports");
-            });
-
-            builder.Entity<Car>(b =>
-            {
-                b.OwnsOne(p => p.Characteristic);
-            });
-            
             builder.Entity<Report>();
 
             builder.Entity<CarEngine>();

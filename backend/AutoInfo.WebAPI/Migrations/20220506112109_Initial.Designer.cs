@@ -3,15 +3,17 @@ using System;
 using AutoInfo.DLL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AutoInfo.WebAPI.Migrations
 {
     [DbContext(typeof(CarReportDbContext))]
-    partial class CarReportDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220506112109_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,29 +79,6 @@ namespace AutoInfo.WebAPI.Migrations
                     b.HasKey("EngineNumber");
 
                     b.ToTable("CarEngines");
-                });
-
-            modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarInspect", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("CarVIN")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CardNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<double>("Mileage")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CarVIN");
-
-                    b.ToTable("CarInspect");
                 });
 
             modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarLicense", b =>
@@ -243,13 +222,6 @@ namespace AutoInfo.WebAPI.Migrations
                     b.Navigation("Engine");
                 });
 
-            modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarInspect", b =>
-                {
-                    b.HasOne("AutoInfo.Domain.Models.Car.Car", null)
-                        .WithMany("CarInspects")
-                        .HasForeignKey("CarVIN");
-                });
-
             modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarLicense", b =>
                 {
                     b.HasOne("AutoInfo.Domain.Models.Car.Car", "Car")
@@ -304,8 +276,6 @@ namespace AutoInfo.WebAPI.Migrations
 
             modelBuilder.Entity("AutoInfo.Domain.Models.Car.Car", b =>
                 {
-                    b.Navigation("CarInspects");
-
                     b.Navigation("License")
                         .IsRequired();
 

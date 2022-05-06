@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace AutoInfo.Domain.Models
 {
-    public class VehiclePassport : Passport
+    public abstract class VehiclePassport<TVehicle, TOwner> : Passport
     {
-        [Required]
         public DateTime YearOfManufacture { get; set; }
         
-        [Required]
-        public VehicleCharacteristic Characteristic { get; set; }
+        public abstract TVehicle Vehicle { get; set; }
         
-        [Required]
-        public IEnumerable<VehicleOwner> Owners { get; set; }
+        public abstract IEnumerable<TOwner> Owners { get; set; }
     }
 }

@@ -11,25 +11,27 @@ namespace AutoInfo.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ReportController : ControllerBase
+    public class CarController : ControllerBase
     {
         private readonly CarReportDbContext _dbContext;
-        
-        public ReportController(CarReportDbContext dbContext)
+
+        public CarController(CarReportDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         [HttpGet]
-        public IEnumerable<Car> GetReports()
+        public IEnumerable<Car> GetCars()
         {
-            var report = _dbContext.Cars
+            var car = _dbContext.Cars
                 .Include(c => c.Engine)
                 .Include(c => c.License)
+                .ThenInclude(c => c.CarPassport)
                 .Include(c => c.Passport)
-                .ThenInclude(p => p.Owners);
-
-            return report;
+                .ThenInclude(c => c.Owners)
+                .Include(c => c.CarInspects);
+            
+            return car;
         }
 
         [HttpPost]
@@ -67,9 +69,10 @@ namespace AutoInfo.WebAPI.Controllers
                             CitizenShip = null,
                             OwnerType = OwnerType.NaturalPerson,
                             OrganizationName = null,
-                            Id = Guid.NewGuid()
+                            Id = Guid.NewGuid(),
                         }
                     },
+                    CarId = carUid
                 },
                 License = new CarLicense
                 {

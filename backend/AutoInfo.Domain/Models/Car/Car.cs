@@ -1,20 +1,22 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace AutoInfo.Domain.Models.Car
 {
-    public class Car : Vehicle
+    public class Car : Vehicle<CarEngine, CarPassport, CarLicense>
     {
+        [Key]
+        public Guid VIN { get; set; }
+        
         public string CarNumber { get; set; }
 
-        public Guid PassportId { get; set; }
-        public Guid LicenseId { get; set; }
+        public override CarEngine Engine { get; set; }
         
-        [ForeignKey("PassportId")]
-        public VehiclePassport CarPassport { get; set; }
+        public override CarPassport Passport { get; set; }
         
-        [ForeignKey("LicenseId")]
-        public CarLicense CarLicense { get; set; }
+        public override CarLicense License { get; set; }
 
+        public IEnumerable<CarInspect> CarInspects { get; set; }
     }
 }

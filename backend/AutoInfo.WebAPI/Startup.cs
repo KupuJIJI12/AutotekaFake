@@ -23,7 +23,11 @@ namespace AutoInfo.WebAPI
                     optionsBuilder => optionsBuilder.MigrationsAssembly(GetType().Assembly.FullName));
             });
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
+            
             services.AddSwaggerGen();
         }
 

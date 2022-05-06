@@ -1,13 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoInfo.Domain.Enums;
 
 namespace AutoInfo.Domain.Models
 {
-    public class VehicleOwner : Person
+    public abstract class VehicleOwner<TPassport> : Person
     {
-        public Guid Id { get; set; }
-        
-        public VehiclePassport VehiclePassport { get; set; }
+        public virtual IEnumerable<TPassport> VehiclePassports { get; set; }
         
         public OwnerType OwnerType { get; set; }
         
