@@ -18,13 +18,13 @@ const props = defineProps<Props>();
 <style lang="scss" scoped>
 button {
   outline: none;
-  background-color: unset;
+  background-color: transparent;
   //border: none;
   height: 50px;
   width: 100px;
   border-radius: 7px;
-  border: none;
-  color: white;
+  border: 1px solid #c7c7c7;
+  color: #c7c7c7;
 
   &:active {
 
@@ -32,7 +32,8 @@ button {
 
   &:hover {
     cursor: pointer;
-    border: 1px solid white;
+    border: 1px solid #01aaff;
+    color: #01aaff !important;
   }
 }
 </style>

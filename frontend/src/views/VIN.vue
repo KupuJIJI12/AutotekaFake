@@ -8,16 +8,15 @@
           <div class="auto-info-block__report__actions">
             <Button
               value="Скачать"
-              backColor="#ED7749"
+              backColor="#0af"
+              textColor="white"
               width="100px"
               height="30px">
             </Button>
           </div>
-          <div class="auto-info-block__report_tech-spec">
-            <div></div>
-            <div></div>
-          </div>
         </div>
+        <spec-info-block :specifications="specifications"></spec-info-block>
+        <restrict-info-block :restrictions="restrictions"></restrict-info-block>
       </div>
     </div>
   </main>
@@ -25,8 +24,57 @@
 
 <script setup lang="ts">
 import Button from "@/components/Button.vue";
+import SpecInfoBlock from "@/components/SpecInfoBlock.vue";
+import RestrictInfoBlock from "@/components/RestrictInfoBlock.vue";
+import {Restrict} from "@/models/Restrict";
 
 const reportDate = "1 июня 2019 года";
+const specifications = [
+  [
+    {
+      type: 'VIN',
+      value: 'XW8AN2XXXFXXXXXXX'
+    },
+    {
+      type: 'Госномер',
+      value: 'Х000ХХ777'
+    },
+    {
+      type: 'Номер двигателя',
+      value: '08XXX4A'
+    },
+    {
+      type: 'Номер ПТС',
+      value: '78УС60XXXX'
+    }
+  ],
+  [
+    {
+      type: 'Год выпуска',
+      value: '2014'
+    },
+    {
+      type: 'Тип ТС',
+      value: 'Легковая'
+    },
+    {
+      type: 'Цвет',
+      value: 'Белый'
+    },
+    {
+      type: 'Объём двигателя',
+      value: '1 598 см^3'
+    }
+  ]
+]
+const restrictions: Restrict[] = [
+  {
+    type: 'Запрет на регистрационные действия',
+    date: '10 октября 2018 года',
+    organization: 'Судебный пристав',
+    region: 'Москва'
+  }
+]
 </script>
 
 <style lang="scss" scoped>
@@ -38,8 +86,7 @@ const reportDate = "1 июня 2019 года";
   .wrp__main__cnt {
     margin-top: 35px;
     width: 100%;
-    max-width: 950px;
-    border: 1px solid red;
+    max-width: 650px;
   }
 
   .auto-info-block_report{

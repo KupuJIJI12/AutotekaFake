@@ -40,7 +40,7 @@ button {
   width: v-bind('width');
   border-radius: 7px;
   border: none;
-  color: v-bind(textColor);
+  color: v-bind(textColor) !important;
 
   &:active {
 
