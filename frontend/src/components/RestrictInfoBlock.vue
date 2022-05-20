@@ -26,6 +26,7 @@
 <script lang="ts" setup>
 import InfoBlock from "@/components/InfoBlock";
 import {Restrict} from "@/models/Restrict";
+
 interface Props {
   restrictions: {
     required: true,

@@ -2,7 +2,8 @@
   <main class="wrp__main__container">
     <div class="wrp__main__cnt">
       <div class="wrp__main__cnt__auto-info-block">
-        <h1>Skoda Oktavia, 2014</h1>
+        <h1>Четырка, 999999999999999 года</h1>
+        <img src="" alt="">
         <div class="auto-info-block_report">
           <label class="auto-info-block__report_label">Отчёт от {{ reportDate }}</label>
           <div class="auto-info-block__report__actions">
@@ -17,16 +18,22 @@
         </div>
         <spec-info-block :specifications="specifications"></spec-info-block>
         <restrict-info-block :restrictions="restrictions"></restrict-info-block>
+        <owner-info-block :owners="owners"></owner-info-block>
+        <crash-info-block :crashes="crashes"></crash-info-block>
       </div>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import Button from "@/components/Button.vue";
+import {Restrict} from "@/models/Restrict";
+import {Owner, OwnerType} from "@/models/Owner";
+import OwnerInfoBlock from "@/components/OwnerInfoBlock.vue";
 import SpecInfoBlock from "@/components/SpecInfoBlock.vue";
 import RestrictInfoBlock from "@/components/RestrictInfoBlock.vue";
-import {Restrict} from "@/models/Restrict";
+import Button from "@/components/Button.vue";
+import CrashInfoBlock from "@/components/CrashInfoBlock.vue";
+import {Crash} from "@/models/Crash";
 
 const reportDate = "1 июня 2019 года";
 const specifications = [
@@ -75,6 +82,49 @@ const restrictions: Restrict[] = [
     region: 'Москва'
   }
 ]
+const owners: Owner[] = [
+  {
+    ownershipPeriod: new Date(),
+    ownershipDuration: new Date(),
+    type: OwnerType.NaturalPerson,
+    regionRegistration: 'Samara'
+  },
+]
+const crashes: Crash[] = [
+  {
+    date: new Date(),
+    type: "Столкновение",
+    vehicleCondition: 'Повреждено',
+    damaged: [
+      {
+        type: "Столкновение",
+        region: 'Москва'
+      }
+    ]
+  },
+  {
+    date: new Date(),
+    type: "Столкновение",
+    vehicleCondition: 'Повреждено',
+    damaged: [
+      {
+        type: "Столкновение",
+        region: 'Москва'
+      }
+    ]
+  },
+  {
+    date: new Date(),
+    type: "Столкновение",
+    vehicleCondition: 'Повреждено',
+    damaged: [
+      {
+        type: "Столкновение",
+        region: 'Москва'
+      }
+    ]
+  }
+]
 </script>
 
 <style lang="scss" scoped>
@@ -82,6 +132,7 @@ const restrictions: Restrict[] = [
   width: 100%;
   display: flex;
   justify-content: center;
+  margin-bottom: 50px;
 
   .wrp__main__cnt {
     margin-top: 35px;

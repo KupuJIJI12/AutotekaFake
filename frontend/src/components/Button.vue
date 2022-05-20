@@ -20,11 +20,11 @@ interface Props {
   },
   width: {
     type: string,
-    required: true
+    default: 'auto'
   },
   height: {
     type: string,
-    required: true
+    default: 'auto'
   }
 }
 
