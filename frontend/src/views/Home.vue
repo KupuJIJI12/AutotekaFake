@@ -24,6 +24,7 @@ import Button from "@/components/Button.vue";
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
   //background-image: url("~@/assets/tracks-removebg.png");
 
   &__input{

@@ -40,7 +40,7 @@ import LinkButton from "@/components/LinkButton.vue";
 .wrp {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(45deg, #2F4258, #436C71, #67C393);
+  background: white;
 
   &__header {
     display: flex;
@@ -79,22 +79,22 @@ import LinkButton from "@/components/LinkButton.vue";
 
         button {
           border: 1px solid white;
-
-          &:hover {
-            background-color: #436573;
-            border: none;
-          }
+          background-color: #01aaff;
+          color: white !important;
         }
       }
     }
   }
 
   &__main {
-    height: 80%;
+
   }
 
   &__footer {
-
+    opacity: .1;
+    background-color: black;
+    height: 250px;
+    border-top: 1px solid #e0e0e0;
   }
 }
 

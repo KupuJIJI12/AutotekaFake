@@ -18,20 +18,22 @@ input {
   outline: none;
   border-radius: 7px;
   background-color: unset;
-  border: 1px solid white;
-  color: white;
+  border: 1px solid #c7c7c7;
+  color: black !important;
   height: 45px;
   width: 500px;
   padding-left: 10px;
 
   &::placeholder{
-    color: whitesmoke;
+    color: #c7c7c7;
 
   }
 
-  &:focus::placeholder{
-    color: transparent;
-    
+  &:focus {
+    border: 1px solid #01aaff;
+    ::placeholder{
+      color: transparent;
+    }
   }
 }
 </style>

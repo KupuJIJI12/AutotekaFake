@@ -20,11 +20,11 @@ interface Props {
   },
   width: {
     type: string,
-    required: true
+    default: 'auto'
   },
   height: {
     type: string,
-    required: true
+    default: 'auto'
   }
 }
 
@@ -40,7 +40,7 @@ button {
   width: v-bind('width');
   border-radius: 7px;
   border: none;
-  color: v-bind(textColor);
+  color: v-bind(textColor) !important;
 
   &:active {
 
