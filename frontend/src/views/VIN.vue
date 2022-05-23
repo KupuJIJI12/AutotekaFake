@@ -20,6 +20,8 @@
         <restrict-info-block :restrictions="restrictions"></restrict-info-block>
         <owner-info-block :owners="owners"></owner-info-block>
         <crash-info-block :crashes="crashes"></crash-info-block>
+        <inspect-info-block :inspects="inspects"></inspect-info-block>
+        <line-chart class="chart-of-mileage" :data="chartData"></line-chart>
       </div>
     </div>
   </main>
@@ -34,6 +36,9 @@ import RestrictInfoBlock from "@/components/RestrictInfoBlock.vue";
 import Button from "@/components/Button.vue";
 import CrashInfoBlock from "@/components/CrashInfoBlock.vue";
 import {Crash} from "@/models/Crash";
+import InspectInfoBlock from "@/components/InspectInfoBlock.vue";
+import { Inspect } from "@/models/Inspect";
+import LineChart from "@/lineChart";
 
 const reportDate = "1 июня 2019 года";
 const specifications = [
@@ -125,6 +130,66 @@ const crashes: Crash[] = [
     ]
   }
 ]
+const inspects: Inspect[] = [
+  {
+    date: new Date(2019, 3).toLocaleDateString("ru-Ru"),
+    mileage: 1000,
+    price: 10000,
+    region: 'Samara',
+    organization: 'Takaya',
+    isPlan: false
+  },
+  {
+    date: new Date(2020, 1).toLocaleDateString("ru-Ru"),
+    mileage: 15000,
+    price: 10000,
+    region: 'Samara',
+    organization: 'Takaya',
+    isPlan: false
+  },
+  {
+    date: new Date(2021, 6).toLocaleDateString("ru-Ru"),
+    mileage: 45000,
+    price: 10000,
+    region: 'Samara',
+    organization: 'Takaya',
+    isPlan: false
+  },
+  {
+    date: new Date(2021, 8).toLocaleDateString("ru-Ru"),
+    mileage: 60000,
+    price: 10000,
+    region: 'Samara',
+    organization: 'Takaya',
+    isPlan: false
+  },
+  {
+    date: new Date(2022, 5).toLocaleDateString("ru-Ru"),
+    mileage: 45000,
+    price: 10000,
+    region: 'Samara',
+    organization: 'Takaya',
+    isPlan: false
+  },
+  {
+    date: new Date(2022, 12).toLocaleDateString("ru-Ru"),
+    mileage: 83000,
+    price: 10000,
+    region: 'Samara',
+    organization: 'Takaya',
+    isPlan: false
+  },
+]
+const chartData = {
+  labels: inspects.map(v => /\d+\.\d+$/.exec(v.date.toString())),
+  datasets: [
+    {
+      label: "История пробега автомобиля",
+      backgroundColor: "#0af",
+      data: inspects.map(v => v.mileage)
+    }
+  ]
+};
 </script>
 
 <style lang="scss" scoped>
@@ -148,6 +213,10 @@ const crashes: Crash[] = [
     :first-child{
       margin-right: 15px;
     }
+  }
+
+  .chart-of-mileage{
+    margin-top: 35px;
   }
 }
 </style>
