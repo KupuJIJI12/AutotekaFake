@@ -2,7 +2,7 @@
 
 namespace AutoInfo.Domain.Models.Car
 {
-    public class CarInspect : VehicleInspect
+    public class CarRestrict : VehicleRestrict
     {
         public Guid Id { get; set; }
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using AutoInfo.Domain.Enums;
-using AutoInfo.Domain.Models;
+﻿using AutoInfo.Domain.Models;
 using AutoInfo.Domain.Models.Car;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +12,10 @@ namespace AutoInfo.DLL.Data
         public DbSet<CarEngine> CarEngines { get; set; }
         public DbSet<CarPassport> CarPassports { get; set; }
         public DbSet<CarLicense> CarLicenses { get; set; }
+        public DbSet<CarPlanInspect> CarPlanInspects { get; set; }
+        public DbSet<CarInspect> CarInspects { get; set; }
+        public DbSet<CarCrash> CarCrashes { get; set; }
+        public DbSet<CarRestrict> CarRestricts { get; set; }
 
         public CarReportDbContext(DbContextOptions<CarReportDbContext> options)
             : base(options)
@@ -22,10 +23,6 @@ namespace AutoInfo.DLL.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Report>();
-
-            builder.Entity<CarEngine>();
-            
             builder.Entity<CarOwner>(typeBuilder =>
             {
                 typeBuilder.Property(p => p.FirstName);
