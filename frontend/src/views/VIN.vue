@@ -39,46 +39,76 @@ import {Crash} from "@/models/Crash";
 import InspectInfoBlock from "@/components/InspectInfoBlock.vue";
 import { Inspect } from "@/models/Inspect";
 import LineChart from "@/lineChart";
+import {formatDate} from "@/helpers/dateFormatter";
+import { ref, onBeforeMount} from "vue";
 
-const reportDate = "1 июня 2019 года";
-const specifications = [
-  [
-    {
-      type: 'VIN',
-      value: 'XW8AN2XXXFXXXXXXX'
-    },
-    {
-      type: 'Госномер',
-      value: 'Х000ХХ777'
-    },
-    {
-      type: 'Номер двигателя',
-      value: '08XXX4A'
-    },
-    {
-      type: 'Номер ПТС',
-      value: '78УС60XXXX'
-    }
-  ],
-  [
-    {
-      type: 'Год выпуска',
-      value: '2014'
-    },
-    {
-      type: 'Тип ТС',
-      value: 'Легковая'
-    },
-    {
-      type: 'Цвет',
-      value: 'Белый'
-    },
-    {
-      type: 'Объём двигателя',
-      value: '1 598 см^3'
-    }
+const report = ref({});
+let reportDate = ref('');
+let specifications = ref([])
+
+onBeforeMount(async () => {
+  await fetch(`https://localhost:5001/api/Report`)
+      .then(r => r.json())
+      .then(data => report.value = data[0]);
+
+  reportDate.value = formatDate(report.value.date);
+  const car = report.value.car;
+  specifications.value = [
+    [
+      {
+        type: 'VIN',
+        value: car.vin
+      },
+      {
+        type: 'Госномер',
+        value: car.carNumber
+      },
+      {
+        type: 'Номер двигателя',
+        value: car.engine.engineNumber
+      },
+      {
+        type: 'Номер ПТС',
+        value: car.passport.seriesAndNumberPassport
+      },
+      {
+        type: 'Номер Кузова',
+        value: '78УС60XXXX'
+      },
+      {
+        type: 'Номер СТС',
+        value: car.license.registrationNumber
+      }
+    ],
+    [
+      {
+        type: 'Год выпуска',
+        value: /^\d+/.exec(car.passport.yearOfManufacture)[0]
+      },
+      {
+        type: 'Тип ТС',
+        value: 'Легковая'
+      },
+      {
+        type: 'Цвет',
+        value: car.color
+      },
+      {
+        type: 'Объём двигателя',
+        value: `${car.engine.displacement} см³`
+      },
+      {
+        type: 'Мощность',
+        value:`${car.engine.power} л.с.`
+      },
+      {
+        type: 'Последний пробег',
+        value: '78 300 км'
+      }
+    ]
   ]
-]
+})
+
 const restrictions: Restrict[] = [
   {
     type: 'Запрет на регистрационные действия',
@@ -190,6 +220,7 @@ const chartData = {
     }
   ]
 };
+
 </script>
 
 <style lang="scss" scoped>
