@@ -1,7 +1,7 @@
 export type Owner = {
     ownershipPeriod: Date,
     ownershipDuration: Date,
-    type: OwnerType,
+    type: OwnerType | string,
     regionRegistration: string,
     organisationName?: string
 }

@@ -5,14 +5,14 @@
         <h1>Четырка, 999999999999999 года</h1>
         <img src="" alt="">
         <div class="auto-info-block_report">
-          <label class="auto-info-block__report_label">Отчёт от {{ reportDate }}</label>
+          <label class="auto-info-block__report_label">Отчёт от <b>{{ reportDate }}</b></label>
           <div class="auto-info-block__report__actions">
             <Button
-              value="Скачать"
-              backColor="#0af"
-              textColor="white"
-              width="100px"
-              height="30px">
+                value="Скачать"
+                backColor="#0af"
+                textColor="white"
+                width="100px"
+                height="30px">
             </Button>
           </div>
         </div>
@@ -37,22 +37,30 @@ import Button from "@/components/Button.vue";
 import CrashInfoBlock from "@/components/CrashInfoBlock.vue";
 import {Crash} from "@/models/Crash";
 import InspectInfoBlock from "@/components/InspectInfoBlock.vue";
-import { Inspect } from "@/models/Inspect";
+import {Inspect} from "@/models/Inspect";
 import LineChart from "@/lineChart";
 import {formatDate} from "@/helpers/dateFormatter";
-import { ref, onBeforeMount} from "vue";
+import {onBeforeMount, ref} from "vue";
 
 const report = ref({});
-let reportDate = ref('');
-let specifications = ref([])
+const reportDate = ref('');
+const specifications = ref([])
+const restrictions = ref<Restrict[]>([])
+const owners = ref<Owner[]>([])
+const crashes = ref<Crash[]>([])
+const inspects = ref<Inspect[]>([])
+const chartData = ref({});
 
 onBeforeMount(async () => {
   await fetch(`https://localhost:5001/api/Report`)
       .then(r => r.json())
       .then(data => report.value = data[0]);
 
+  console.log(report.value)
+  //todo
   reportDate.value = formatDate(report.value.date);
   const car = report.value.car;
+
   specifications.value = [
     [
       {
@@ -99,7 +107,7 @@ onBeforeMount(async () => {
       },
       {
         type: 'Мощность',
-        value:`${car.engine.power} л.с.`
+        value: `${car.engine.power} л.с.`
       },
       {
         type: 'Последний пробег',
@@ -107,25 +115,82 @@ onBeforeMount(async () => {
       }
     ]
   ]
+
+  car.carRestricts.forEach((r: { type: string; date: string | Date; organization: string; region: string; }) => restrictions.value.push({
+    type: r.type,
+    date: /.+г./.exec(formatDate(new Date(r.date)))[0],
+    organization: r.organization,
+    region: r.region
+  }))
+
+  car.passport.owners.forEach(o => owners.value.push({
+    //todo
+    ownershipPeriod: new Date(),
+    ownershipDuration: new Date(),
+    type: o.ownerType === 0 ? 'Физическое лицо' : 'Юридическое лицо',
+    regionRegistration: o.presentAddress,
+    organisationName: o.ownerType !== 0 ? o.organizationName : null
+  }))
+
+  car.carCrashes.forEach(c => crashes.value.push({
+    date: /.+г./.exec(formatDate(new Date(c.date)))[0],
+    type: c.type,
+    vehicleCondition: 'Повреждено',
+    damaged: c.vehicleDamages.map(d => ({
+      type: d.type
+    }))
+  }))
+
+  car.carInspects.forEach(i => inspects.value.push({
+    date: new Date(i.date).toLocaleDateString("ru-Ru"),
+    mileage: i.mileage,
+    price: i.cost,
+    region: i.region,
+    organization: i.organization,
+    isPlan: false
+  }))
+
+  car.carPlanInspects.forEach(i => inspects.value.push({
+    date: new Date(i.date).toLocaleDateString("ru-Ru"),
+    mileage: i.mileage,
+    price: i.cost,
+    region: i.region,
+    organization: i.organization,
+    isPlan: true
+  }))
+
+  inspects.value = inspects.value.sort((a, b) => Date.parse(a.date as string) - Date.parse(b.date as string))
+
+  chartData.value = {
+    labels: inspects.value.map(v => /\d+\.\d+$/.exec(v.date.toString())),
+    datasets: [
+      {
+        label: "История пробега автомобиля",
+        backgroundColor: "#0af",
+        data: inspects.value.map(v => v.mileage)
+      }
+    ]
+  };
 })
 
-const restrictions: Restrict[] = [
+
+/*const restrictions: Restrict[] = [
   {
     type: 'Запрет на регистрационные действия',
     date: '10 октября 2018 года',
     organization: 'Судебный пристав',
     region: 'Москва'
   }
-]
-const owners: Owner[] = [
+]*/
+/*const owners: Owner[] = [
   {
     ownershipPeriod: new Date(),
     ownershipDuration: new Date(),
     type: OwnerType.NaturalPerson,
     regionRegistration: 'Samara'
   },
-]
-const crashes: Crash[] = [
+]*/
+/*const crashes: Crash[] = [
   {
     date: new Date(),
     type: "Столкновение",
@@ -159,8 +224,8 @@ const crashes: Crash[] = [
       }
     ]
   }
-]
-const inspects: Inspect[] = [
+]*/
+/*const inspects: Inspect[] = [
   {
     date: new Date(2019, 3).toLocaleDateString("ru-Ru"),
     mileage: 1000,
@@ -209,17 +274,8 @@ const inspects: Inspect[] = [
     organization: 'Takaya',
     isPlan: false
   },
-]
-const chartData = {
-  labels: inspects.map(v => /\d+\.\d+$/.exec(v.date.toString())),
-  datasets: [
-    {
-      label: "История пробега автомобиля",
-      backgroundColor: "#0af",
-      data: inspects.map(v => v.mileage)
-    }
-  ]
-};
+]*/
+
 
 </script>
 
@@ -236,17 +292,17 @@ const chartData = {
     max-width: 650px;
   }
 
-  .auto-info-block_report{
+  .auto-info-block_report {
     display: flex;
     align-items: center;
     margin-bottom: 25px;
 
-    :first-child{
+    :first-child {
       margin-right: 15px;
     }
   }
 
-  .chart-of-mileage{
+  .chart-of-mileage {
     margin-top: 35px;
   }
 }
