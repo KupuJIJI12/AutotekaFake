@@ -38,14 +38,18 @@ const props = defineProps<Props>()
 </script>
 
 <style lang="scss" scoped>
-.restrict-info-block__content{
-  .restrict-type-date{
-    margin-bottom: 10px;
-    font-weight: bold;
-  }
+.restrict-info-block__container{
 
-  .restrict-type{
-    color: #858585;
+  .restrict-info-block__content{
+    .restrict-type-date{
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .restrict-type{
+      color: #858585;
+    }
   }
 }
+
 </style>

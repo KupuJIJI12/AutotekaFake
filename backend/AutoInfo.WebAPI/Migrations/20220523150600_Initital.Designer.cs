@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AutoInfo.WebAPI.Migrations
 {
     [DbContext(typeof(CarReportDbContext))]
-    [Migration("20220506112109_Initial")]
-    partial class Initial
+    [Migration("20220523150600_Initital")]
+    partial class Initital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,6 +56,43 @@ namespace AutoInfo.WebAPI.Migrations
                     b.ToTable("Cars");
                 });
 
+            modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarCrash", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CarCrashes");
+                });
+
+            modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarDamage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CarCrashId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarCrashId");
+
+                    b.ToTable("CarDamage");
+                });
+
             modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarEngine", b =>
                 {
                     b.Property<Guid>("EngineNumber")
@@ -79,6 +116,43 @@ namespace AutoInfo.WebAPI.Migrations
                     b.HasKey("EngineNumber");
 
                     b.ToTable("CarEngines");
+                });
+
+            modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarInspect", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CarVIN")
+                        .HasColumnType("uuid");
+
+                    b.Property<double?>("Cost")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("Mileage")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Organization")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Region")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarVIN");
+
+                    b.ToTable("CarInspects");
                 });
 
             modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarLicense", b =>
@@ -179,6 +253,78 @@ namespace AutoInfo.WebAPI.Migrations
                     b.ToTable("CarPassports");
                 });
 
+            modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarPlanInspect", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CarVIN")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CardNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double?>("Cost")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("Mileage")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Organization")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Region")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarVIN");
+
+                    b.ToTable("CarPlanInspects");
+                });
+
+            modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarRestrict", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CarVIN")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Organization")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Region")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarVIN");
+
+                    b.ToTable("CarRestricts");
+                });
+
             modelBuilder.Entity("AutoInfo.Domain.Models.Report", b =>
                 {
                     b.Property<Guid>("Id")
@@ -196,6 +342,21 @@ namespace AutoInfo.WebAPI.Migrations
                     b.HasIndex("CarVIN");
 
                     b.ToTable("Reports");
+                });
+
+            modelBuilder.Entity("CarCarCrash", b =>
+                {
+                    b.Property<Guid>("CarCrashesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CarsVIN")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CarCrashesId", "CarsVIN");
+
+                    b.HasIndex("CarsVIN");
+
+                    b.ToTable("CarCarCrash");
                 });
 
             modelBuilder.Entity("CarOwnerCarPassport", b =>
@@ -220,6 +381,24 @@ namespace AutoInfo.WebAPI.Migrations
                         .HasForeignKey("EngineNumber");
 
                     b.Navigation("Engine");
+                });
+
+            modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarDamage", b =>
+                {
+                    b.HasOne("AutoInfo.Domain.Models.Car.CarCrash", null)
+                        .WithMany("VehicleDamages")
+                        .HasForeignKey("CarCrashId");
+                });
+
+            modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarInspect", b =>
+                {
+                    b.HasOne("AutoInfo.Domain.Models.Car.Car", "Car")
+                        .WithMany("CarInspects")
+                        .HasForeignKey("CarVIN")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarLicense", b =>
@@ -250,6 +429,28 @@ namespace AutoInfo.WebAPI.Migrations
                     b.Navigation("Vehicle");
                 });
 
+            modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarPlanInspect", b =>
+                {
+                    b.HasOne("AutoInfo.Domain.Models.Car.Car", "Car")
+                        .WithMany("CarPlanInspects")
+                        .HasForeignKey("CarVIN")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+                });
+
+            modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarRestrict", b =>
+                {
+                    b.HasOne("AutoInfo.Domain.Models.Car.Car", "Car")
+                        .WithMany("CarRestricts")
+                        .HasForeignKey("CarVIN")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+                });
+
             modelBuilder.Entity("AutoInfo.Domain.Models.Report", b =>
                 {
                     b.HasOne("AutoInfo.Domain.Models.Car.Car", "Car")
@@ -257,6 +458,21 @@ namespace AutoInfo.WebAPI.Migrations
                         .HasForeignKey("CarVIN");
 
                     b.Navigation("Car");
+                });
+
+            modelBuilder.Entity("CarCarCrash", b =>
+                {
+                    b.HasOne("AutoInfo.Domain.Models.Car.CarCrash", null)
+                        .WithMany()
+                        .HasForeignKey("CarCrashesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AutoInfo.Domain.Models.Car.Car", null)
+                        .WithMany()
+                        .HasForeignKey("CarsVIN")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CarOwnerCarPassport", b =>
@@ -276,11 +492,22 @@ namespace AutoInfo.WebAPI.Migrations
 
             modelBuilder.Entity("AutoInfo.Domain.Models.Car.Car", b =>
                 {
+                    b.Navigation("CarInspects");
+
+                    b.Navigation("CarPlanInspects");
+
+                    b.Navigation("CarRestricts");
+
                     b.Navigation("License")
                         .IsRequired();
 
                     b.Navigation("Passport")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AutoInfo.Domain.Models.Car.CarCrash", b =>
+                {
+                    b.Navigation("VehicleDamages");
                 });
 #pragma warning restore 612, 618
         }

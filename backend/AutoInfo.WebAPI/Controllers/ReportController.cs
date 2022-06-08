@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoInfo.DLL.Data;
-using AutoInfo.Domain.Enums;
-using AutoInfo.Domain.Models.Car;
+using AutoInfo.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,73 +13,42 @@ namespace AutoInfo.WebAPI.Controllers
     public class ReportController : ControllerBase
     {
         private readonly CarReportDbContext _dbContext;
-        
+
         public ReportController(CarReportDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         [HttpGet]
-        public IEnumerable<Car> GetReports()
+        public IEnumerable<Report> GetReports()
         {
-            var report = _dbContext.Cars
-                .Include(c => c.Engine)
-                .Include(c => c.License)
-                .Include(c => c.Passport)
-                .ThenInclude(p => p.Owners);
+            var reports = _dbContext.Reports
+                .Include(c => c.Car)
+                .Include(c => c.Car.Engine)
+                .Include(c => c.Car.License)
+                .Include(c => c.Car.Passport)
+                .ThenInclude(c => c.Owners)
+                .Include(c => c.Car.CarCrashes)
+                .ThenInclude(c => c.VehicleDamages)
+                .Include(c => c.Car.CarInspects)
+                .Include(c => c.Car.CarPlanInspects)
+                .Include(c => c.Car.CarRestricts);
 
-            return report;
+            return reports;
         }
 
         [HttpPost]
-        public async Task AddCar()
+        public async Task CreateReport([FromQuery] string vin)
         {
-            var carUid = Guid.NewGuid();
-            var testCar = new Car
+            var car = await _dbContext.Cars.FindAsync(Guid.Parse(vin));
+            var newReport = new Report
             {
-                Brand = "Zhiguli",
-                Model = "ВАЗ-2106",
-                Color = "Вишнёвый",
-                Weight = 1000.0f,
-                VIN = carUid,
-                CarNumber = "АУ777Е",
-                Engine = new CarEngine
-                {
-                    EngineNumber = Guid.NewGuid(),
-                    Displacement = 1.6f,
-                    Model = "Mitsubishi",
-                    Power = 105,
-                    Type = EngineType.PetrolEngine
-                },
-                Passport = new CarPassport
-                {
-                    SeriesAndNumberPassport = 0,
-                    IssuingAuthority = "",
-                    IssuingDate = default,
-                    YearOfManufacture = default,
-                    Id = Guid.NewGuid(),
-                    Owners = new []
-                    {
-                        new CarOwner("firstName", "secondName")
-                        {
-                            PresentAddress = null,
-                            CitizenShip = null,
-                            OwnerType = OwnerType.NaturalPerson,
-                            OrganizationName = null,
-                            Id = Guid.NewGuid()
-                        }
-                    },
-                },
-                License = new CarLicense
-                {
-                    Id = Guid.NewGuid(),
-                    CarId = carUid,
-                    RegistrationNumber = "sfasafs",
-                    Category = VehicleСategory.B,
-                }
+                Car = car,
+                Date = DateTime.Now,
+                Id = Guid.NewGuid()
             };
-            
-            await _dbContext.Cars.AddAsync(testCar);
+
+            await _dbContext.Reports.AddAsync(newReport);
             await _dbContext.SaveChangesAsync();
         }
     }

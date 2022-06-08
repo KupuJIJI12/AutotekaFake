@@ -1,5 +1,5 @@
 export type Crash = {
-    date: Date,
+    date: Date | string,
     type: string,
     vehicleCondition: string
     damaged: Damage[]

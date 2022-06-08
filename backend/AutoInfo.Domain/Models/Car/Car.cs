@@ -17,6 +17,12 @@ namespace AutoInfo.Domain.Models.Car
         
         public override CarLicense License { get; set; }
 
+        public IEnumerable<CarPlanInspect> CarPlanInspects { get; set; }
+        
         public IEnumerable<CarInspect> CarInspects { get; set; }
+        
+        public IEnumerable<CarCrash> CarCrashes { get; set; }
+        
+        public IEnumerable<CarRestrict> CarRestricts { get; set; }
     }
 }
