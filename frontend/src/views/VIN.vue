@@ -51,14 +51,20 @@ const crashes = ref<Crash[]>([])
 const inspects = ref<Inspect[]>([])
 const chartData = ref({});
 
+function getOnlyDate(date: string | Date): string{
+  return /.+г./.exec(formatDate(new Date(date)))[0]
+}
+
 onBeforeMount(async () => {
   await fetch(`https://localhost:5001/api/Report`)
       .then(r => r.json())
       .then(data => report.value = data[0]);
 
   console.log(report.value)
-  //todo
-  reportDate.value = formatDate(report.value.date);
+
+  const regexDateResult = /(.+г.),(.+):\d+$/.exec(formatDate(report.value.date))
+  reportDate.value = regexDateResult[1] + regexDateResult[2];
+
   const car = report.value.car;
 
   specifications.value = [
@@ -118,7 +124,7 @@ onBeforeMount(async () => {
 
   car.carRestricts.forEach((r: { type: string; date: string | Date; organization: string; region: string; }) => restrictions.value.push({
     type: r.type,
-    date: /.+г./.exec(formatDate(new Date(r.date)))[0],
+    date: getOnlyDate(r.date),
     organization: r.organization,
     region: r.region
   }))
@@ -133,7 +139,7 @@ onBeforeMount(async () => {
   }))
 
   car.carCrashes.forEach(c => crashes.value.push({
-    date: /.+г./.exec(formatDate(new Date(c.date)))[0],
+    date: getOnlyDate(c.date),
     type: c.type,
     vehicleCondition: 'Повреждено',
     damaged: c.vehicleDamages.map(d => ({
@@ -142,7 +148,7 @@ onBeforeMount(async () => {
   }))
 
   car.carInspects.forEach(i => inspects.value.push({
-    date: new Date(i.date).toLocaleDateString("ru-Ru"),
+    date: new Date(i.date),
     mileage: i.mileage,
     price: i.cost,
     region: i.region,
@@ -151,7 +157,7 @@ onBeforeMount(async () => {
   }))
 
   car.carPlanInspects.forEach(i => inspects.value.push({
-    date: new Date(i.date).toLocaleDateString("ru-Ru"),
+    date: new Date(i.date),
     mileage: i.mileage,
     price: i.cost,
     region: i.region,
@@ -159,10 +165,14 @@ onBeforeMount(async () => {
     isPlan: true
   }))
 
-  inspects.value = inspects.value.sort((a, b) => Date.parse(a.date as string) - Date.parse(b.date as string))
+  inspects.value = inspects.value.sort((a, b) => (a.date as Date).getTime() - (b.date as Date).getTime())
+  inspects.value = inspects.value.map(i => {
+    i.date = getOnlyDate(i.date);
+    return i;
+  })
 
   chartData.value = {
-    labels: inspects.value.map(v => /\d+\.\d+$/.exec(v.date.toString())),
+    labels: inspects.value.map(v => v.date),
     datasets: [
       {
         label: "История пробега автомобиля",
@@ -172,110 +182,6 @@ onBeforeMount(async () => {
     ]
   };
 })
-
-
-/*const restrictions: Restrict[] = [
-  {
-    type: 'Запрет на регистрационные действия',
-    date: '10 октября 2018 года',
-    organization: 'Судебный пристав',
-    region: 'Москва'
-  }
-]*/
-/*const owners: Owner[] = [
-  {
-    ownershipPeriod: new Date(),
-    ownershipDuration: new Date(),
-    type: OwnerType.NaturalPerson,
-    regionRegistration: 'Samara'
-  },
-]*/
-/*const crashes: Crash[] = [
-  {
-    date: new Date(),
-    type: "Столкновение",
-    vehicleCondition: 'Повреждено',
-    damaged: [
-      {
-        type: "Столкновение",
-        region: 'Москва'
-      }
-    ]
-  },
-  {
-    date: new Date(),
-    type: "Столкновение",
-    vehicleCondition: 'Повреждено',
-    damaged: [
-      {
-        type: "Столкновение",
-        region: 'Москва'
-      }
-    ]
-  },
-  {
-    date: new Date(),
-    type: "Столкновение",
-    vehicleCondition: 'Повреждено',
-    damaged: [
-      {
-        type: "Столкновение",
-        region: 'Москва'
-      }
-    ]
-  }
-]*/
-/*const inspects: Inspect[] = [
-  {
-    date: new Date(2019, 3).toLocaleDateString("ru-Ru"),
-    mileage: 1000,
-    price: 10000,
-    region: 'Samara',
-    organization: 'Takaya',
-    isPlan: false
-  },
-  {
-    date: new Date(2020, 1).toLocaleDateString("ru-Ru"),
-    mileage: 15000,
-    price: 10000,
-    region: 'Samara',
-    organization: 'Takaya',
-    isPlan: false
-  },
-  {
-    date: new Date(2021, 6).toLocaleDateString("ru-Ru"),
-    mileage: 45000,
-    price: 10000,
-    region: 'Samara',
-    organization: 'Takaya',
-    isPlan: false
-  },
-  {
-    date: new Date(2021, 8).toLocaleDateString("ru-Ru"),
-    mileage: 60000,
-    price: 10000,
-    region: 'Samara',
-    organization: 'Takaya',
-    isPlan: false
-  },
-  {
-    date: new Date(2022, 5).toLocaleDateString("ru-Ru"),
-    mileage: 45000,
-    price: 10000,
-    region: 'Samara',
-    organization: 'Takaya',
-    isPlan: false
-  },
-  {
-    date: new Date(2022, 12).toLocaleDateString("ru-Ru"),
-    mileage: 83000,
-    price: 10000,
-    region: 'Samara',
-    organization: 'Takaya',
-    isPlan: false
-  },
-]*/
-
 
 </script>
 
