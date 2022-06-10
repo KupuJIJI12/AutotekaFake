@@ -10,6 +10,10 @@ namespace AutoInfo.Domain.Models.Car
         public Guid VIN { get; set; }
         
         public string CarNumber { get; set; }
+        
+        public string BodyNumber { get; set; }
+        
+        public string Type { get; set; }
 
         public override CarEngine Engine { get; set; }
         

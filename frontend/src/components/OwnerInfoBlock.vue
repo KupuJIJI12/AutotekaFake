@@ -4,7 +4,7 @@
       <div class="owners-info-block__content" v-for="(owner, i) in props.owners" :key="owner.ownershipPeriod">
         <p><b>{{i + 1}} владелец</b></p>
         <p class="owners-info-block__content_p">
-          <span class="owners-info-block__content_span-type">Период владения: </span>
+          <span class="owners-info-block__content_span-type">Дата начала владения: </span>
           <span class="owners-info-block__content_span-value">{{owner.ownershipPeriod}}</span>
         </p>
         <p class="owners-info-block__content_p">

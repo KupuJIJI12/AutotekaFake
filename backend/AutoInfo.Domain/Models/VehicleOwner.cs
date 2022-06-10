@@ -12,6 +12,10 @@ namespace AutoInfo.Domain.Models
         
         public string? OrganizationName { get; set; }
 
+        public DateTime OwnershipPeriod { get; set; }
+
+        public DateTime OwnershipDuration { get; set; }
+        
         protected VehicleOwner(string firstName, string secondName, string middleName = "")
             : base(firstName, secondName, middleName)
         { }

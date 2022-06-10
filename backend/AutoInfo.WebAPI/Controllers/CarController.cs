@@ -52,23 +52,26 @@ namespace AutoInfo.WebAPI.Controllers
         public async Task CreateCar()
         {
             using var webClient = new WebClient();
-            var image1 = webClient.DownloadData("https://i.ytimg.com/vi/qgVQQ9P7yWE/maxresdefault.jpg");
-            var image2 = webClient.DownloadData("https://wpapers.ru/wallpapers/avto/VAZ/6920/1280x720_%D0%92%D0%90%D0%97-2114-(%D1%87%D0%B5%D1%82%D1%8B%D1%80%D0%BA%D0%B0).jpg");
+            var image1 = webClient.DownloadData("https://31.img.avito.st/image/1/1.UvqbOLa6_hOtkTwWsyU9xUqb-BcvG_bRKpv6Gy-T_A.XqFkRC0tI-zUSeCsuyS9Y53PwJVn78Cqsm1ZQSR00X8");
+            var image2 = webClient.DownloadData("https://79.img.avito.st/image/1/1.zjIHpba6YtsxDKDeF-qhDdYGZN-zhmoZtgZm07MOYA.XOS0qXsakAILTD-Z4P94ZDid3Qgk-cPr1c43vxSRgUE");
             var carUid = Guid.NewGuid();
             var testCar = new Car
             {
-                Brand = "Zhiguli",
-                Model = "ВАЗ-2106",
-                Color = "Вишнёвый",
+                Brand = "LADA",
+                Model = "ВАЗ-2114",
+                Color = "Белый",
                 Weight = 1000.0f,
                 VIN = carUid,
                 CarNumber = "АУ777Е",
+                BodyNumber = "XW8AN2XXXFXXXXXXX",
+                Type = "Легковая (хэтчбек)",
+                LastMileage = 90000,
                 Engine = new CarEngine
                 {
                     EngineNumber = Guid.NewGuid(),
                     Displacement = 1.6f,
-                    Model = "Mitsubishi",
-                    Power = 105,
+                    Model = "Zhiguli",
+                    Power = 90,
                     Type = EngineType.PetrolEngine
                 },
                 Passport = new CarPassport
@@ -76,7 +79,7 @@ namespace AutoInfo.WebAPI.Controllers
                     SeriesAndNumberPassport = 327042304,
                     IssuingAuthority = "Москва ул.Уличная",
                     IssuingDate = DateTime.Today,
-                    YearOfManufacture = new DateTime(1990, 1, 12),
+                    YearOfManufacture = new DateTime(2013, 1, 12),
                     Id = Guid.NewGuid(),
                     Owners = new[]
                     {
@@ -87,7 +90,9 @@ namespace AutoInfo.WebAPI.Controllers
                             CitizenShip = "Россия",
                             OwnerType = OwnerType.NaturalPerson,
                             OrganizationName = "УФМС РФ",
-                            Id = Guid.NewGuid()
+                            Id = Guid.NewGuid(),
+                            OwnershipPeriod = new DateTime(2013, 5, 10),
+                            OwnershipDuration = new DateTime(2015, 6, 10),
                         },
                         new CarOwner("Иван",
                             "Иванов")
@@ -96,7 +101,20 @@ namespace AutoInfo.WebAPI.Controllers
                             CitizenShip = "Россия",
                             OwnerType = OwnerType.NaturalPerson,
                             OrganizationName = "УФМС РФ",
-                            Id = Guid.NewGuid()
+                            Id = Guid.NewGuid(),
+                            OwnershipPeriod = new DateTime(2015, 6, 10),
+                            OwnershipDuration = new DateTime(2018, 5, 10),
+                        },
+                        new CarOwner("Александр",
+                            "Александров")
+                        {
+                            PresentAddress = "Москва",
+                            CitizenShip = "Россия",
+                            OwnerType = OwnerType.NaturalPerson,
+                            OrganizationName = "УФМС РФ",
+                            Id = Guid.NewGuid(),
+                            OwnershipPeriod = new DateTime(2018, 5, 10),
+                            OwnershipDuration = DateTime.Today
                         }
                     },
                 },
@@ -112,7 +130,7 @@ namespace AutoInfo.WebAPI.Controllers
                     new CarPlanInspect
                     {
                         Mileage = 6000,
-                        Date = new DateTime(2003, 5, 10),
+                        Date = new DateTime(2014, 7, 10),
                         Region = "Москва",
                         Organization = "LADA",
                         Description = "Плановый техосмотр",
@@ -123,7 +141,29 @@ namespace AutoInfo.WebAPI.Controllers
                     new CarPlanInspect
                     {
                         Mileage = 15000,
-                        Date = new DateTime(2003, 12, 2),
+                        Date = new DateTime(2014, 12, 2),
+                        Region = "Москва",
+                        Organization = "LADA",
+                        Description = "Плановый техосмотр",
+                        Cost = 2000,
+                        Id = Guid.NewGuid(),
+                        CardNumber = "DLFKSDKFDSKFL",
+                    },
+                    new CarPlanInspect
+                    {
+                        Mileage = 30000,
+                        Date = new DateTime(2015, 4, 2),
+                        Region = "Москва",
+                        Organization = "LADA",
+                        Description = "Плановый техосмотр",
+                        Cost = 2000,
+                        Id = Guid.NewGuid(),
+                        CardNumber = "DLFKSDKFDSKFL",
+                    },
+                    new CarPlanInspect
+                    {
+                        Mileage = 75000,
+                        Date = new DateTime(2015, 8, 2),
                         Region = "Москва",
                         Organization = "LADA",
                         Description = "Плановый техосмотр",
@@ -137,7 +177,7 @@ namespace AutoInfo.WebAPI.Controllers
                     new CarInspect
                     {
                         Mileage = 8000,
-                        Date = new DateTime(2003, 8, 24),
+                        Date = new DateTime(2014, 8, 24),
                         Region = "Москва",
                         Organization = "FitService",
                         Description = "Замена бампера",
@@ -146,12 +186,33 @@ namespace AutoInfo.WebAPI.Controllers
                     },
                     new CarInspect
                     {
-                        Mileage = 17000,
-                        Date = new DateTime(2004, 2, 1),
+                        Mileage = 25000,
+                        Date = new DateTime(2015, 2, 1),
                         Region = "Москва",
                         Organization = "FitService",
                         Description = "Покраска двери",
                         Cost = 5000,
+                        Id = Guid.NewGuid(),
+                    },
+                    new CarInspect
+                    {
+                        Mileage = 60000,
+                        Date = new DateTime(2015, 10, 1),
+                        Region = "Москва",
+                        Organization = "FitService",
+                        Description = "Покраска двери",
+                        Cost = 5000,
+                        Id = Guid.NewGuid(),
+                    }
+                    ,
+                    new CarInspect
+                    {
+                        Mileage = 90000,
+                        Date = new DateTime(2016, 2, 1),
+                        Region = "Москва",
+                        Organization = "FitService",
+                        Description = "Ремонт двигателя",
+                        Cost = 15000,
                         Id = Guid.NewGuid(),
                     }
                 },
@@ -159,11 +220,13 @@ namespace AutoInfo.WebAPI.Controllers
                 {
                     new CarCrash
                     {
-                        Date = new DateTime(2003, 8, 20),
-                        Type = "Столкновение.",
+                        Date = new DateTime(2016, 8, 20),
+                        Type = "Столкновение",
                         VehicleDamages = new[]
                         {
-                            new CarDamage {Type = VehicleDamageType.Bumper, Id = Guid.NewGuid()}
+                            new CarDamage {Type = VehicleDamageType.Bumper, Id = Guid.NewGuid()},
+                            new CarDamage {Type = VehicleDamageType.RightFirstDoor, Id = Guid.NewGuid()},
+                            new CarDamage {Type = VehicleDamageType.LeftFirstDoor, Id = Guid.NewGuid()}
                         },
                         Id = Guid.NewGuid()
                     }
@@ -172,7 +235,7 @@ namespace AutoInfo.WebAPI.Controllers
                 {
                     new CarRestrict
                     {
-                        Date = DateTime.Today,
+                        Date = new DateTime(2016, 10, 20),
                         Type = "Ограничение на регистрационные действия.",
                         Organization = "Суд Москвы",
                         Region = "Москва",
@@ -190,6 +253,25 @@ namespace AutoInfo.WebAPI.Controllers
                     {
                         Id = Guid.NewGuid(),
                         Value = image2
+                    }
+                },
+                Fines = new []
+                {
+                    new Fine()
+                    {
+                        Cost = 500.0,
+                        Date = new DateTime(2018, 7, 20),
+                        DecisionNumber = "XXXXXXXXXXXXXXXX9054",
+                        Description = "Превышение установленной скорости движения транспортного средства на величину более 20, но не более 40 км/ч..",
+                        Id = Guid.NewGuid()
+                    },
+                    new Fine()
+                    {
+                        Cost = 1500.0,
+                        Date = new DateTime(2018, 10, 20),
+                        DecisionNumber = "XXXXXXXXXXXXXXXX7064",
+                        Description = "Отсутствует",
+                        Id = Guid.NewGuid()
                     }
                 }
             };

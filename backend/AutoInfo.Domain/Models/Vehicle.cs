@@ -17,7 +17,11 @@ namespace AutoInfo.Domain.Models
         public string Color { get; set; }
 
         public virtual IEnumerable<Photo> Photos { get; set; }
+
+        public IEnumerable<Fine> Fines { get; set; }
         
         public float? Weight { get; set; }
+        
+        public double LastMileage { get; set; }
     }
 }
