@@ -92,8 +92,7 @@ import LinkButton from "@/components/LinkButton.vue";
   }
 
   &__footer {
-    opacity: .1;
-    background-color: black;
+    background-color: #f8f8f8;
     height: 250px;
     border-top: 1px solid #e0e0e0;
   }

@@ -2,7 +2,7 @@
   <main class="wrp__main__container">
     <div class="wrp__main__cnt">
       <div class="wrp__main__cnt__auto-info-block">
-        <h1>Четырка, 999999999999999 года</h1>
+        <h1>{{title}}</h1>
         <vue-easy-lightbox
           scrollDisabled
           escDisabled
@@ -11,28 +11,32 @@
           :imgs="imgs"
           @hide="handleHide">
         </vue-easy-lightbox>
-        <div class="vehicle-picture-block" @click="handleHide">
-          <img :src="preview" alt="Загрузка...">
-          <div><b>1/2</b></div>
-        </div>
         <div class="auto-info-block_report">
           <label class="auto-info-block__report_label">Отчёт от <b>{{ reportDate }}</b></label>
           <div class="auto-info-block__report__actions">
             <Button
-                value="Скачать"
-                backColor="#ED7749"
-                textColor="white"
-                width="100px"
-                height="30px">
+              value="Скачать"
+              backColor="#ED7749"
+              textColor="white"
+              width="100px"
+              height="30px">
             </Button>
           </div>
         </div>
+        <div class="vehicle-picture-block" @click="handleHide">
+          <img :src="preview" alt="Загрузка...">
+          <div><b>1/2</b></div>
+        </div>
         <spec-info-block :specifications="specifications"></spec-info-block>
         <restrict-info-block :restrictions="restrictions"></restrict-info-block>
+        <wanted-info-block></wanted-info-block>
+        <taxi-licenses-info-block></taxi-licenses-info-block>
         <owner-info-block :owners="owners"></owner-info-block>
         <crash-info-block :crashes="crashes"></crash-info-block>
+        <fine-info-block :fines="[]"></fine-info-block>
         <inspect-info-block :inspects="inspects"></inspect-info-block>
         <line-chart class="chart-of-mileage" :data="chartData"></line-chart>
+        <conclusion-info-block :conclusion="conclusion"></conclusion-info-block>
       </div>
     </div>
   </main>
@@ -53,6 +57,10 @@ import LineChart from "@/lineChart";
 import {formatDate} from "@/helpers/dateFormatter";
 import { onBeforeMount, onMounted, ref } from "vue";
 import VueEasyLightbox from 'vue-easy-lightbox'
+import WantedInfoBlock from "@/components/WantedInfoBlock.vue";
+import TaxiLicensesInfoBlock from "@/components/TaxiLicensesInfoBlock.vue";
+import FineInfoBlock from "@/components/FineInfoBlock.vue";
+import ConclusionInfoBlock from "@/components/ConclusionInfoBlock.vue"
 
 const report = ref({});
 const reportDate = ref('');
@@ -65,6 +73,8 @@ const chartData = ref({});
 const lightboxVisible = ref(false);
 const imgs = ref([]);
 const preview = ref('')
+const title = ref('')
+const conclusion = ref({})
 
 function handleHide() {
   lightboxVisible.value = !lightboxVisible.value;
@@ -85,6 +95,7 @@ onBeforeMount(async () => {
   reportDate.value = regexDateResult[1] + regexDateResult[2];
 
   const car = report.value.car;
+  title.value = `${report.value.car.model}, ${/^(\d+)-/.exec(report.value.car.passport.yearOfManufacture)[1]} года`
 
   imgs.value = car.photos.reverse().map((p: { description: any; value: any; }) => ({
     title: p.description,
@@ -207,6 +218,21 @@ onBeforeMount(async () => {
       }
     ]
   };
+
+  conclusion.value = {
+    advantages: [
+      owners.value.length <= 3 ? 'Мало владельцев' : undefined,
+      'Не находится в розыске',
+      'Не работало в такси'
+    ].filter(a => !!a),
+    disadvantages: [
+      restrictions.value.length > 0 ? 'Действующие ограничения' : undefined,
+      crashes.value.length > 0 ? 'ДТП' : undefined,
+      owners.value.length > 3 ? 'Много владельцев' : undefined,
+      'Действующие штрафы'
+    ].filter(d => !!d),
+    other: [].filter(o => !!o)
+  }
 });
 
 </script>
@@ -240,7 +266,7 @@ onBeforeMount(async () => {
   .wrp__main__cnt {
     margin-top: 35px;
     width: 100%;
-    max-width: 650px;
+    max-width: 750px;
   }
 
   .auto-info-block_report {
