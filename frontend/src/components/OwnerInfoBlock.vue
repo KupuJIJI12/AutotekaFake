@@ -1,5 +1,5 @@
 <template>
-  <info-block :header="header">
+  <info-block :header="header" :is-strength="owners.length <= 2">
     <div class="owners-info-block__container">
       <div class="owners-info-block__content" v-for="(owner, i) in props.owners" :key="owner.ownershipPeriod">
         <p><b>{{i + 1}} владелец</b></p>

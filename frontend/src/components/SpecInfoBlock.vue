@@ -18,7 +18,7 @@ interface Props {
   specifications: {
     required: true,
     type: []
-  }
+  },
 }
 
 const props = defineProps<Props>()
@@ -28,9 +28,9 @@ const props = defineProps<Props>()
 .spec-info-block__container{
   width: 100%;
   display: flex;
+  justify-content: space-between;
 
   &:first-child .spec-info-block{
-    margin-right: 25px;
 
     .spec-type_span{
       color: #858585;

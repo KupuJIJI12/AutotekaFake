@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using AutoInfo.DLL.Data;
 using AutoInfo.Domain.Enums;
@@ -50,6 +51,9 @@ namespace AutoInfo.WebAPI.Controllers
         [HttpPost]
         public async Task CreateCar()
         {
+            using var webClient = new WebClient();
+            var image1 = webClient.DownloadData("https://i.ytimg.com/vi/qgVQQ9P7yWE/maxresdefault.jpg");
+            var image2 = webClient.DownloadData("https://wpapers.ru/wallpapers/avto/VAZ/6920/1280x720_%D0%92%D0%90%D0%97-2114-(%D1%87%D0%B5%D1%82%D1%8B%D1%80%D0%BA%D0%B0).jpg");
             var carUid = Guid.NewGuid();
             var testCar = new Car
             {
@@ -173,6 +177,19 @@ namespace AutoInfo.WebAPI.Controllers
                         Organization = "Суд Москвы",
                         Region = "Москва",
                         Id = Guid.NewGuid(),
+                    }
+                },
+                Photos = new []
+                {
+                    new Photo()
+                    {
+                        Id = Guid.NewGuid(),
+                        Value = image1
+                    },
+                    new Photo()
+                    {
+                        Id = Guid.NewGuid(),
+                        Value = image2
                     }
                 }
             };

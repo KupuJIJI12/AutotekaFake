@@ -1,5 +1,5 @@
 <template>
-  <info-block header="Ограничения">
+  <info-block :is-strength="false" header="Ограничения">
     <div class="restrict-info-block__container">
       <p>Запрет регистрационных действий на машину накладывается, если у автовладельца есть неоплаченные штрафы и налоги, либо если имущество стало предметом спора.</p>
       <div class="restrict-info-block__content" v-for="restrict in props.restrictions" :key="restrict.date">

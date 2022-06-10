@@ -16,7 +16,9 @@ namespace AutoInfo.Domain.Models.Car
         public override CarPassport Passport { get; set; }
         
         public override CarLicense License { get; set; }
-
+        
+        public override IEnumerable<Photo> Photos { get; set; }
+        
         public IEnumerable<CarPlanInspect> CarPlanInspects { get; set; }
         
         public IEnumerable<CarInspect> CarInspects { get; set; }

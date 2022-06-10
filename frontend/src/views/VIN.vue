@@ -3,13 +3,24 @@
     <div class="wrp__main__cnt">
       <div class="wrp__main__cnt__auto-info-block">
         <h1>Четырка, 999999999999999 года</h1>
-        <img src="" alt="">
+        <vue-easy-lightbox
+          scrollDisabled
+          escDisabled
+          moveDisabled
+          :visible="lightboxVisible"
+          :imgs="imgs"
+          @hide="handleHide">
+        </vue-easy-lightbox>
+        <div class="vehicle-picture-block" @click="handleHide">
+          <img :src="preview" alt="Загрузка...">
+          <div><b>1/2</b></div>
+        </div>
         <div class="auto-info-block_report">
           <label class="auto-info-block__report_label">Отчёт от <b>{{ reportDate }}</b></label>
           <div class="auto-info-block__report__actions">
             <Button
                 value="Скачать"
-                backColor="#0af"
+                backColor="#ED7749"
                 textColor="white"
                 width="100px"
                 height="30px">
@@ -40,7 +51,8 @@ import InspectInfoBlock from "@/components/InspectInfoBlock.vue";
 import {Inspect} from "@/models/Inspect";
 import LineChart from "@/lineChart";
 import {formatDate} from "@/helpers/dateFormatter";
-import {onBeforeMount, ref} from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
+import VueEasyLightbox from 'vue-easy-lightbox'
 
 const report = ref({});
 const reportDate = ref('');
@@ -50,6 +62,13 @@ const owners = ref<Owner[]>([])
 const crashes = ref<Crash[]>([])
 const inspects = ref<Inspect[]>([])
 const chartData = ref({});
+const lightboxVisible = ref(false);
+const imgs = ref([]);
+const preview = ref('')
+
+function handleHide() {
+  lightboxVisible.value = !lightboxVisible.value;
+}
 
 function getOnlyDate(date: string | Date): string{
   return /.+г./.exec(formatDate(new Date(date)))[0]
@@ -57,95 +76,102 @@ function getOnlyDate(date: string | Date): string{
 
 onBeforeMount(async () => {
   await fetch(`https://localhost:5001/api/Report`)
-      .then(r => r.json())
-      .then(data => report.value = data[0]);
+    .then(r => r.json())
+    .then(data => report.value = data[0]);
 
-  console.log(report.value)
+  console.log(report.value);
 
-  const regexDateResult = /(.+г.),(.+):\d+$/.exec(formatDate(report.value.date))
+  const regexDateResult = /(.+г.),(.+):\d+$/.exec(formatDate(report.value.date));
   reportDate.value = regexDateResult[1] + regexDateResult[2];
 
   const car = report.value.car;
 
+  imgs.value = car.photos.reverse().map((p: { description: any; value: any; }) => ({
+    title: p.description,
+    src: "data:image/png;base64, " + p.value
+  }));
+
+  preview.value = imgs.value[0].src;
+
   specifications.value = [
     [
       {
-        type: 'VIN',
+        type: "VIN",
         value: car.vin
       },
       {
-        type: 'Госномер',
+        type: "Госномер",
         value: car.carNumber
       },
       {
-        type: 'Номер двигателя',
+        type: "Номер двигателя",
         value: car.engine.engineNumber
       },
       {
-        type: 'Номер ПТС',
+        type: "Номер ПТС",
         value: car.passport.seriesAndNumberPassport
       },
       {
-        type: 'Номер Кузова',
-        value: '78УС60XXXX'
+        type: "Номер Кузова",
+        value: "78УС60XXXX"
       },
       {
-        type: 'Номер СТС',
+        type: "Номер СТС",
         value: car.license.registrationNumber
       }
     ],
     [
       {
-        type: 'Год выпуска',
+        type: "Год выпуска",
         value: /^\d+/.exec(car.passport.yearOfManufacture)[0]
       },
       {
-        type: 'Тип ТС',
-        value: 'Легковая'
+        type: "Тип ТС",
+        value: "Легковая"
       },
       {
-        type: 'Цвет',
+        type: "Цвет",
         value: car.color
       },
       {
-        type: 'Объём двигателя',
+        type: "Объём двигателя",
         value: `${car.engine.displacement} см³`
       },
       {
-        type: 'Мощность',
+        type: "Мощность",
         value: `${car.engine.power} л.с.`
       },
       {
-        type: 'Последний пробег',
-        value: '78 300 км'
+        type: "Последний пробег",
+        value: "78 300 км"
       }
     ]
-  ]
+  ];
 
   car.carRestricts.forEach((r: { type: string; date: string | Date; organization: string; region: string; }) => restrictions.value.push({
     type: r.type,
     date: getOnlyDate(r.date),
     organization: r.organization,
     region: r.region
-  }))
+  }));
 
   car.passport.owners.forEach(o => owners.value.push({
     //todo
     ownershipPeriod: new Date(),
     ownershipDuration: new Date(),
-    type: o.ownerType === 0 ? 'Физическое лицо' : 'Юридическое лицо',
+    type: o.ownerType === 0 ? "Физическое лицо" : "Юридическое лицо",
     regionRegistration: o.presentAddress,
     organisationName: o.ownerType !== 0 ? o.organizationName : null
-  }))
+  }));
 
   car.carCrashes.forEach(c => crashes.value.push({
     date: getOnlyDate(c.date),
     type: c.type,
-    vehicleCondition: 'Повреждено',
+    vehicleCondition: "Повреждено",
     damaged: c.vehicleDamages.map(d => ({
       type: d.type
     }))
-  }))
+  }));
 
   car.carInspects.forEach(i => inspects.value.push({
     date: new Date(i.date),
@@ -154,7 +180,7 @@ onBeforeMount(async () => {
     region: i.region,
     organization: i.organization,
     isPlan: false
-  }))
+  }));
 
   car.carPlanInspects.forEach(i => inspects.value.push({
     date: new Date(i.date),
@@ -163,13 +189,13 @@ onBeforeMount(async () => {
     region: i.region,
     organization: i.organization,
     isPlan: true
-  }))
+  }));
 
-  inspects.value = inspects.value.sort((a, b) => (a.date as Date).getTime() - (b.date as Date).getTime())
+  inspects.value = inspects.value.sort((a, b) => (a.date as Date).getTime() - (b.date as Date).getTime());
   inspects.value = inspects.value.map(i => {
     i.date = getOnlyDate(i.date);
     return i;
-  })
+  });
 
   chartData.value = {
     labels: inspects.value.map(v => v.date),
@@ -181,7 +207,7 @@ onBeforeMount(async () => {
       }
     ]
   };
-})
+});
 
 </script>
 
@@ -191,6 +217,25 @@ onBeforeMount(async () => {
   display: flex;
   justify-content: center;
   margin-bottom: 50px;
+
+  .vehicle-picture-block{
+    margin-bottom: 15px;
+
+    &:hover{
+      cursor: pointer;
+    }
+
+    img{
+      width: 100%;
+      height: 100%;
+    }
+    div{
+      text-align: center;
+      padding: 5px;
+      background-color: #e9e9e9;
+      margin-top: -5px;
+    }
+  }
 
   .wrp__main__cnt {
     margin-top: 35px;
