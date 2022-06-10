@@ -32,6 +32,7 @@
 
 <script setup lang="ts">
 import LinkButton from "@/components/LinkButton.vue";
+//import 'vue-easy-lightbox/external-css/vue-easy-lightbox.css'
 
 </script>
 

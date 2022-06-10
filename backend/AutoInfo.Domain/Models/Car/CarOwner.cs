@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AutoInfo.Domain.Enums;
 
 namespace AutoInfo.Domain.Models.Car
 {

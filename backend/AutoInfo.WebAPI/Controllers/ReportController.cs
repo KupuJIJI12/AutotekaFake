@@ -32,7 +32,8 @@ namespace AutoInfo.WebAPI.Controllers
                 .ThenInclude(c => c.VehicleDamages)
                 .Include(c => c.Car.CarInspects)
                 .Include(c => c.Car.CarPlanInspects)
-                .Include(c => c.Car.CarRestricts);
+                .Include(c => c.Car.CarRestricts)
+                .Include(c => c.Car.Photos);
 
             return reports;
         }
